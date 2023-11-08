@@ -1,0 +1,19 @@
+{
+  "name": "blogging-platform",
+  "version": "1.0.0",
+  "description": "Blogging Application Platform's Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Anum Batool",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.2.0",
+    "nodemon": "^3.0.1"
+  }
+}
