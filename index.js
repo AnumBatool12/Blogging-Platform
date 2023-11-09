@@ -5,6 +5,7 @@ require("dotenv").config()
 
 //routers
 const routerLogin=require("./Routes/loginRoute")
+const profileRouter=require("./Routes/profileRouter")
 
 //app
 const app=express()
@@ -16,6 +17,7 @@ app.listen(3000, ()=>{
 
 //routing
 app.use("/login", routerLogin)
+app.use("/profile", profileRouter)
 
 //Database
 mongoose.connect(process.env.MONGODB_STRING).then(()=>{
