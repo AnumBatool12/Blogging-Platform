@@ -2,7 +2,8 @@ const {
     createBlogPost,
     getBlogPost,
     deleteBlogPost,
-    updateBlogPost
+    updateBlogPost,
+    rateBlogPost
 }=require("../Controllers/bloghandling")
 const {authUserProfile, authAdminProfile}=require("../utils")
 
@@ -13,6 +14,8 @@ blogRouter.post("/createBlog", createBlogPost)//
 blogRouter.post("/getblog", getBlogPost)//
 blogRouter.delete("/", authUserProfile ,deleteBlogPost)//
 blogRouter.patch("/", authUserProfile,updateBlogPost)//
+blogRouter.post("/rate", rateBlogPost)//
+
 
 
 

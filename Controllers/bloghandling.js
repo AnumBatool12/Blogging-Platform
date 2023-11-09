@@ -2,7 +2,6 @@ const BlogPost=require("../Models/BlogPost.schema")
 const blogComment=require("../Models/blogComment.schema")
 const blogRate=require("../Models/blogRate.schema")
 const notification=require("../Models/notification.schema")
-const { use } = require("../Routes/loginRoute")
 
 //create blog post
 let createBlogPost=(req, res)=>{
@@ -155,6 +154,40 @@ let deleteBlogPost=async(req, res)=>{
 //get all blog posts (pagination)
 
 //rate blog posts
+let rateBlogPost=async(req, res)=>{
+    let rate=req.body
+
+    //finding if blog exists
+    let id=rate.blogid
+    let found=await BlogPost.find({_id:id})
+    if (!found){
+        res.status(400).json({
+            "Success":false,
+            "message":"Blog Post not Found",
+        })
+    }
+
+    try{
+        blogRate.create(rate).then(()=>{
+            res.status(201).json({
+                "Success":true,
+                "message":"Blog has been successfully rated",
+            })
+        }).catch(err=>{
+            res.status(400).json({
+                "Success":false,
+                "message":"Blog Post rating error",
+                "error":err
+            })
+        })
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"Error in Rating Blog Post",
+            "error":err
+        })
+    }
+}
 
 //comment under blog post
 
@@ -172,5 +205,6 @@ module.exports={
     createBlogPost,
     getBlogPost, 
     deleteBlogPost, 
-    updateBlogPost
+    updateBlogPost,
+    rateBlogPost
 }
