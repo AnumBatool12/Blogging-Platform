@@ -2,7 +2,6 @@ const mongoose=require("mongoose")
 
 const BlogPost=mongoose.Schema({
     "blogID":String, 
-    "userID":String, 
     "username":String, 
     "postContent":String, 
     "keywords":[String],

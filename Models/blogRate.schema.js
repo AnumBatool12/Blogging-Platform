@@ -2,7 +2,7 @@ const mongoose=require("mongoose")
 
 const blogRate=mongoose.Schema({
     "blogID":String, 
-    "userID":String, 
+    "username":String, 
     "rate":String
 })
 
