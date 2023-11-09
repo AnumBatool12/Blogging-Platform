@@ -32,7 +32,7 @@ let deleteAccount=async(req, res)=>{
             let deletedAccount=users.findOneAndDelete({email:email})
             if (deletedAccount){
                 res.status(200).json({
-                    "success":true,
+                    "Success":true,
                     "message":"Account deleted successfully"
                 })
             }
@@ -64,7 +64,7 @@ let updatePassword=async(req, res)=>{
     
     if (profileInfo){
         try{
-            let newPassword=req.body
+            let newPassword=req.body.password
             let updatedUser=await users.findOneAndUpdate(
                 {email:profileInfo.email}, 
                 { $set: {password:newPassword}},
@@ -73,7 +73,7 @@ let updatePassword=async(req, res)=>{
 
             if (updatedUser){
                 res.status(200).json({
-                    "success":true,
+                    "Success":true,
                     "message":"Password updated successfully"
                 })
             }
@@ -105,7 +105,7 @@ let updateEmail=async(req, res)=>{
     
     if (profileInfo){
         try{
-            let newEmail=req.body
+            let newEmail=req.body.email
             let updatedUser=await users.findOneAndUpdate(
                 {email:profileInfo.email}, 
                 { $set: {email:newEmail}},
@@ -146,7 +146,7 @@ let updateUsername=async(req, res)=>{
     
     if (profileInfo){
         try{
-            let newUsername=req.body
+            let newUsername=req.body.username
             let updatedUser=await users.findOneAndUpdate(
                 {email:profileInfo.email}, 
                 { $set: {username:newUsername}},
@@ -183,7 +183,7 @@ let updateUsername=async(req, res)=>{
 
 //diable account
 let disableUserAccount=async(req, res)=>{
-    let auth=req.headers
+    let auth=req.headers.token
 
     if (auth){
         try{
@@ -218,7 +218,7 @@ let disableUserAccount=async(req, res)=>{
     else{
         res.status(401).json({
             "Success":false,
-            "message":"You are not authorized to update username"
+            "message":"You are not authorized to block User"
         })
     }
 }

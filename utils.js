@@ -3,7 +3,7 @@ const jwt=require("jsonwebtoken")
 //This is for user
 const authUserProfile=(req, res, next)=>{
     //getting token from headers
-    const token=req.headers
+    const token=req.headers.token
     if (!token){
         res.status(401).json({"message":"Token not found"})
     }
@@ -26,7 +26,7 @@ const authUserProfile=(req, res, next)=>{
 //This is for admin
 const authAdminProfile=(req, res, next)=>{
     //getting token from headers
-    const token=req.headers
+    const token=req.headers.token
     if (!token){
         res.status(401).json({"message":"Token not found"})
     }
