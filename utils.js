@@ -1,4 +1,5 @@
 const jwt=require("jsonwebtoken")
+const BlogPost=require("./Models/BlogPost.schema")
 
 //This is for user
 const authUserProfile=(req, res, next)=>{
@@ -46,8 +47,7 @@ const authAdminProfile=(req, res, next)=>{
     }
 }
 
-
 module.exports={
     authUserProfile,
-    authAdminProfile
+    authAdminProfile,
 }

@@ -157,16 +157,6 @@ let deleteBlogPost=async(req, res)=>{
 let rateBlogPost=async(req, res)=>{
     let rate=req.body
 
-    //finding if blog exists
-    let id=rate.blogid
-    let found=await BlogPost.find({_id:id})
-    if (!found){
-        res.status(400).json({
-            "Success":false,
-            "message":"Blog Post not Found",
-        })
-    }
-
     try{
         blogRate.create(rate).then(()=>{
             res.status(201).json({
@@ -190,6 +180,41 @@ let rateBlogPost=async(req, res)=>{
 }
 
 //comment under blog post
+let comment=async(req, res)=>{
+    let comment=req.body
+
+    let data=req.body.blogID
+
+    let found=await BlogPost.find({_id:data})
+    if (!found){
+        res.status(404).json({
+            "Success":false,
+            "message":"Blog Post Not Found",
+        })
+    }
+
+    try{
+        blogComment.create(comment).then(()=>{
+            res.status(201).json({
+                "Success":true,
+                "message":"Blog has been successfully commented",
+                "data":comment
+            })
+        }).catch(err=>{
+            res.status(400).json({
+                "Success":false,
+                "message":"Blog Post commenting error",
+                "error":err
+            })
+        })
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"Error in Commenting Blog Post",
+            "error":err
+        })
+    }
+}
 
 //filter blog posts
 
@@ -206,5 +231,6 @@ module.exports={
     getBlogPost, 
     deleteBlogPost, 
     updateBlogPost,
-    rateBlogPost
+    rateBlogPost,
+    comment
 }
