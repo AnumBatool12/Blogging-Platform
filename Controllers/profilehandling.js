@@ -1,5 +1,4 @@
 const users=require("../Models/User.schema")
-const jwt=require("jsonwebtoken")
 
 //get your own profile details (not blogs or password)
 let getUserProfile=(req, res)=>{

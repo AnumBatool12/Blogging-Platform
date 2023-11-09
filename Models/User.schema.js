@@ -5,7 +5,7 @@ const UserSchema=mongoose.Schema({
     "email": String, 
     "password": String,
     "Role":String, 
-    "AccountStatus":String, 
+    "AccountStatus":String, //Active or Disable
 }, {timestamps:true})
 
 const model=mongoose.model("User", UserSchema)

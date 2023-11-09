@@ -19,7 +19,8 @@ let createUser=async(req, res)=>{
     }catch(err){
         res.status(400).json({
             "Success":false,
-            "message":"Error in creating new User"
+            "message":"Error in creating new User",
+            "error":err
         })
     }
 }
@@ -31,7 +32,7 @@ let Login=async(req, res)=>{
     try{
         let user=await users.findOne({email:email})
 
-        if (user){
+        if (user && user.AccountStatus=="Active"){
             if (user.username==username){
                 if (user.password==password){
                     let {password, ...rest}=user
@@ -83,7 +84,7 @@ let Login=async(req, res)=>{
         else{
             res.status(404).json({
                 "Success":false,
-                "message":"No such User"
+                "message":"User not available on site/Doesnt exist"
             })
         }
 

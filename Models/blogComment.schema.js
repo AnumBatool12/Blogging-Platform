@@ -1,8 +1,9 @@
 const mongoose=require("mongoose")
 
 const blogComment=mongoose.Schema({
-    "blogID":String, 
-    "username":String, 
+    //"blogID":String, 
+    "usernameCommenter":String, 
+    "usernameBlogPost":String,
     "comment":String
 }, {timestamps:true})
 
