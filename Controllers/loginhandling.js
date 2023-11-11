@@ -13,7 +13,7 @@ let createUser=async(req, res)=>{
         }).catch(err=>{
             res.status(400).json({
                 "Success":false,
-                "message":"Error in creating new User"
+                "message":"New user could not be created"
             })
         })
     }catch(err){
@@ -42,14 +42,12 @@ let Login=async(req, res)=>{
                     try{
                         if (role=="Admin"){
                             token=jwt.sign({email:email, username:username, role:user.Role}, 
-                            process.env.SECRET_ADMIN, 
-                            {expiresIn:"1h"})
+                            process.env.SECRET_ADMIN)
                             
                         }
                         else if (role=="User"){
                             token=jwt.sign({email:email, username:username, role:user.Role}, 
-                            process.env.SECRET_USER, 
-                            {expiresIn:"1h"})
+                            process.env.SECRET_USER)
                         }
 
                         res.status(200).json({
@@ -81,10 +79,16 @@ let Login=async(req, res)=>{
                 })
             }
         }
+        else if(user && user.AccountStatus=="Disabled"){
+            res.status(403).json({
+                "Success":false,
+                "message":"Your Account has Been Disabled"
+            })
+        }
         else{
             res.status(404).json({
                 "Success":false,
-                "message":"User not available on site/Doesnt exist"
+                "message":"User Doesnot Exists"
             })
         }
 
