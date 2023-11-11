@@ -253,18 +253,47 @@ let followBlogger=async(req, res)=>{
             "error":err
         })
     }
-
-
-
-
-
 }
 
-//sorting blogs
-
-//filtering blogs
-
+//This is used for filteration as well
 //finding blog posts by title, author, or catagory
+let findBlogs=async(req, res)=>{
+    let author = req.params.author;
+    let title = req.params.title;
+    let catagories = req.params.catagory.split(',');; // Assuming categories are comma-separated
+    let keyword=req.params.keyword.split(',');;
+
+    try{
+        let blogs=await BlogPost.find({
+            $or: [
+                { username: author },
+                { BlogTitle: title },
+                { catagory: { $in: catagories } },
+                { keywords: { $in: keyword }}
+            ]
+        })
+
+        if (blogs){
+            res.status(200).json({
+                "Success":true,
+                "message":"Here are some Blogs",
+                "Blogs":blogs
+            })
+        }
+        else{
+            res.status(400).json({
+                "Success":false,
+                "message":"Blogs Not Found",
+            })
+        }
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"Run Time Error During Finding Blog Posts",
+            "error":err
+        })
+    }
+}
 
 //getting blogs on general feed(pagination and mixing with followers posts)
 //This one owns the / route
@@ -275,5 +304,6 @@ module.exports={
     commentOnPost,
     getUsersProfile,
     getBloggersPosts,
-    followBlogger
+    followBlogger,
+    findBlogs
 }

@@ -102,9 +102,9 @@ let Login=async(req, res)=>{
 }
 
 let getUsers=async(req, res)=>{
-    let user= await users.find({})
-    if(user){
-        res.status(200).json(user)
+    let userData= await users.find({})
+    if(userData){
+        res.status(200).json(userData)
     }
     else{
         res.status(404).json({"message": "Error in get All users route"})
