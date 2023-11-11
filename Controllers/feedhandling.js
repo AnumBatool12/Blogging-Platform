@@ -5,6 +5,9 @@ const notification=require("../Models/notification.schema")
 const User=require("../Models/User.schema")
 const followings=require("../Models/following.schema")
 
+const mongoosePaginate = require('mongoose-paginate');
+
+
 //rate a blog post
 let rateBlogPost=async(req, res)=>{
     let blogid=req.params.blogid
@@ -296,7 +299,59 @@ let findBlogs=async(req, res)=>{
 }
 
 //getting blogs on general feed(pagination and mixing with followers posts)
-//This one owns the / route
+let mainFeed=async(req, res)=>{
+    let userid=req.params.author
+    let titles=req.params.title
+    let getusername=req.token.username//no pressure to get this 
+
+    try{
+        let getFollowingList=await followings.find({follower:getusername})//getting list of followers
+        let getFollowerUsername=getFollowingList.map(user=>user.blogger)
+
+        const query={
+            $or:[
+                {username: {$in: [...getFollowerUsername, userid]}},
+                {BlogTitle:titles}
+            ]
+        }
+        
+        const option={
+            page: parseInt(req.query.page) || 1,
+            limit: parseInt(req.query.pageSize) || 10
+        }
+
+        try{
+            let posts=await BlogPost.paginate(query, option);
+            
+            if (posts.docs){
+                res.status(200).json({
+                    "Success":true,
+                    "message":"Here are your posts",
+                    "blogs": posts.docs
+                })
+            }
+            else{
+                res.status(404).json({
+                    "Success":false,
+                    "message":"No posts to be displayed",
+                })
+            }
+        }catch(err){
+            res.status(404).json({
+                "Success":false,
+                "message":"Error in Getting Blog Posts",
+                "error":err
+            })
+        }
+    }catch(err){
+        res.status(404).json({
+            "Success":false,
+            "message":"Error in displaying main feed",
+            "error":err
+        })
+    }
+}
+
 
 
 module.exports={
@@ -305,5 +360,6 @@ module.exports={
     getUsersProfile,
     getBloggersPosts,
     followBlogger,
-    findBlogs
+    findBlogs,
+    mainFeed
 }

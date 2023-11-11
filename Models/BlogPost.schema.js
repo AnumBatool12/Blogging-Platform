@@ -1,3 +1,4 @@
+const mongoosePaginate = require('mongoose-paginate-v2');
 const mongoose=require("mongoose")
 
 const BlogPost=mongoose.Schema({
@@ -9,6 +10,8 @@ const BlogPost=mongoose.Schema({
     "catagory":[String],
     "blogStatus":String //Public or Disabled
 }, {timestamps:true})
+
+BlogPost.plugin(mongoosePaginate);
 
 const model=mongoose.model("BlogPost", BlogPost)
 

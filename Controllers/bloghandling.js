@@ -233,6 +233,7 @@ let getNotification=async(req, res)=>{
         res.status(400).json({
             "Success":false,
             "message":"You are not authorized to see notifcations post",
+            "error":err
         })
     }
 }
