@@ -7,6 +7,7 @@ let getUserProfile=(req, res)=>{
     if (profileInfo){
         res.status(200).json({
             "Success":true, 
+            "message":"Profile Recieved",
             data:{
                 "email":profileInfo.email,
                 "username":profileInfo.username
@@ -180,7 +181,50 @@ let updateUsername=async(req, res)=>{
     }
 }
 
-//diable account
+//update user decription
+let updateUserDesc=async(req, res)=>{
+    let profileInfo=req.token
+    
+    if (profileInfo){
+        try{
+            let newUserDesc=req.body.userDesc;
+            let updatedUser=await users.findOneAndUpdate(
+                {email:profileInfo.email}, 
+                { $set: {userDesc:newUserDesc}},
+                { returnDocument: 'after' }
+            )
+
+            if (updatedUser){
+                res.status(200).json({
+                    "success":true,
+                    "message":"User Description updated successfully"
+                })
+            }
+            else{
+                res.status(404).json({
+                    "Success":false,
+                    "message":"Could not Update User Description",
+                })
+            }
+        }catch(err){
+            res.status(404).json({
+                "Success":false,
+                "message":"Error in Updating User description",
+                "error":err
+            })
+        }        
+    }
+    else{
+        res.status(401).json({
+            "Success":false,
+            "message":"You are not authorized to update user description"
+        })
+    }
+}
+
+
+
+//diable account-->move to admin controllers
 let disableUserAccount=async(req, res)=>{
     let auth=req.headers.token
 
@@ -229,5 +273,6 @@ module.exports={
     updatePassword,
     updateEmail,
     updateUsername,
+    updateUserDesc,
     disableUserAccount
 }
