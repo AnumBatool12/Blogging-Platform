@@ -216,31 +216,8 @@ let deleteBlogPost=async(req, res)=>{
 
 
 
-//rate blog posts
-let rateBlogPost=async(req, res)=>{
-    let rate=req.body
 
-    try{
-        blogRate.create(rate).then(()=>{
-            res.status(201).json({
-                "Success":true,
-                "message":"Blog has been successfully rated",
-            })
-        }).catch(err=>{
-            res.status(400).json({
-                "Success":false,
-                "message":"Blog Post rating error",
-                "error":err
-            })
-        })
-    }catch(err){
-        res.status(400).json({
-            "Success":false,
-            "message":"Error in Rating Blog Post",
-            "error":err
-        })
-    }
-}
+
 
 //comment under blog post
 //this is where notification handling is also done
@@ -309,6 +286,5 @@ module.exports={
     getOwnPosts,
     deleteBlogPost, 
     updateBlogPost,
-    rateBlogPost,
     comment
 }

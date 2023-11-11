@@ -4,7 +4,6 @@ const {
     getOwnPosts,
     deleteBlogPost,
     updateBlogPost,
-    rateBlogPost,
     comment
 }=require("../Controllers/bloghandling")
 const {authUserProfile}=require("../utils")
@@ -19,7 +18,6 @@ blogRouter.get("/:blogid", authUserProfile, getBlogPost)
 blogRouter.patch("/:blogid", authUserProfile, updateBlogPost)//
 blogRouter.delete("/:blogid", authUserProfile ,deleteBlogPost)//
 
-blogRouter.post("/rate",rateBlogPost)//
 blogRouter.post("/comment", comment)//
 
 module.exports=blogRouter
