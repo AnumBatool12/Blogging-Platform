@@ -131,8 +131,8 @@ let commentOnPost=async(req, res)=>{
 
 }
 
-
 //get another bloggers profile (name and desc)
+
 
 //get another bloggers posts
 
