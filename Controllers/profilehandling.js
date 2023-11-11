@@ -155,7 +155,7 @@ let updateUsername=async(req, res)=>{
 
             if (updatedUser){
                 res.status(200).json({
-                    "success":true,
+                    "Success":true,
                     "message":"Username updated successfully"
                 })
             }
@@ -196,7 +196,7 @@ let updateUserDesc=async(req, res)=>{
 
             if (updatedUser){
                 res.status(200).json({
-                    "success":true,
+                    "Success":true,
                     "message":"User Description updated successfully"
                 })
             }
@@ -239,7 +239,7 @@ let disableUserAccount=async(req, res)=>{
 
             if (blockedUser){
                 res.status(200).json({
-                    "success":true,
+                    "Success":true,
                     "message":"User's account status updated successfully"
                 })
             }

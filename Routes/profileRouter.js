@@ -9,7 +9,6 @@ const {getUserProfile,
 const {authUserProfile, authAdminProfile}=require("../utils")
 const express=require("express")
 
-
 let profileRouter=express.Router()
 
 //user profile handling

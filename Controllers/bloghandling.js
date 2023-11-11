@@ -3,7 +3,7 @@ const blogComment=require("../Models/blogComment.schema")
 const blogRate=require("../Models/blogRate.schema")
 const notification=require("../Models/notification.schema")
 
-//create blog post
+//create blog post 
 let createBlogPost=(req, res)=>{
     let blog=req.body
     try{
@@ -30,21 +30,70 @@ let createBlogPost=(req, res)=>{
     }
 }
 
-//read a/one blog post
+//getting own blog posts
+//Comments are only returned when user clicks on blog
+let getOwnPosts= async(req, res)=>{
+    let profileInfo=req.token
+
+    if (profileInfo){
+        try{
+            let email=profileInfo.email
+            let username=profileInfo.username
+
+            let posts=await BlogPost.find( { username:username})
+
+            if (posts){
+                res.status(200).json({
+                    "Success":true, 
+                    "message":"Posts Found",
+                    "Posts":posts
+                })
+            }
+            else{
+                res.status(404).json({
+                    "Success":false,
+                    "message":"Posts not Found",
+                })
+            }
+
+        }catch(err){
+            res.status(404).json({
+                "Success":false,
+                "message":"Run Time Error in getting Blog Posts",
+                "error":err
+            })
+        }
+    }
+    else{
+        res.status(401).json({
+            "Success":false,
+            "message":"Failed to get Token"
+        })
+    }
+}
+
+//getting the one blog post along with comments
 let getBlogPost=async(req, res)=>{
-    let {_id, username}=req.body
-    
+    let blogid=req.params.blogid
+    let profileInfo=req.token
+
     try{
         let blog= await BlogPost.find({
-            _id: _id,
-            username:username
+            _id:blogid,
+            username:profileInfo.username
+        })
+
+        let comments=await blogComment.find({
+            _id:blogid,
+            userCreator:profileInfo.username
         })
 
         if (blog){
             res.status(200).json({
                 "Success":true,
                 "message":"Blog Found",
-                "blogdata":blog
+                "blogdata":blog,
+                "comments":comments
             })
         }
         else{
@@ -54,10 +103,12 @@ let getBlogPost=async(req, res)=>{
             })
         }
 
+
     }catch(err){
         res.status(404).json({
             "Success":false,
-            "message":"Error In Getting Blog Post"
+            "message":"Error In Getting Blog Post",
+            "error":err
         })
     }
 }
@@ -65,18 +116,24 @@ let getBlogPost=async(req, res)=>{
 //update blog post
 let updateBlogPost=async(req, res)=>{
     let userInfo=req.token
-    let {_id, username, postContent, keywords}=req.body
+    let update=req.body
+    let blogid=req.params.blogid
 
     try{
-        if (username==userInfo.username){
+        if (update.username==userInfo.username){
             let updatedPost=await BlogPost.findOneAndUpdate(
-                {_id:_id},
-                { $set: {postContent:postContent, keywords:keywords}},
+                {_id:blogid},
+                { $set: {
+                    BlogTitle:update.BlogTitle,
+                    postContent:update.postContent,
+                    keywords:update.keywords,
+                    catagory:update.catagory
+                }},
                 { returnDocument: 'after' }
             )
 
             if (updatedPost){
-                res.status(200).json({
+                res.status(200).json({ 
                     "Success":true,
                     "message":"Blog Post updated successfully",
                     "updatedPost":updatedPost
@@ -99,7 +156,7 @@ let updateBlogPost=async(req, res)=>{
     }catch(err){
         res.status(400).json({
             "Success":false,
-            "message":"Error in Updating Blog Post",
+            "message":"Run Time Error in Updating Blog Post",
             "error":err
         })
     }
@@ -107,21 +164,19 @@ let updateBlogPost=async(req, res)=>{
 
 //delete blog post
 let deleteBlogPost=async(req, res)=>{
+    let blogid=req.params.blogid
     let userInfo=req.token
-    let blogid=req.body._id
-    let user=req.body.username
-    try{
-        let username=userInfo.username
 
-        if (username==user){
+    if (userInfo){
+        try{
             let delComments=await blogComment.deleteMany({_id:blogid})
             let delRates=await blogRate.deleteMany({_id:blogid})
 
             let deletedPost=await BlogPost.findOneAndDelete({
                 _id:blogid,
-                username:username
+                username:userInfo.username
             })
-    
+
             if (deletedPost){
                 res.status(200).json({
                     "Success":true,
@@ -135,23 +190,29 @@ let deleteBlogPost=async(req, res)=>{
                     "message":"Unable to Delete Blog Post",
                 })
             }
-        }
-        else{
-            res.status(404).json({
+        }catch(err){
+            res.status(400).json({
                 "Success":false,
-                "message":"You are not authorized to delete post",
+                "message":"Run Time Error in Deleting Blog Post",
+                "error":err
             })
         }
-    }catch(err){
-        res.status(400).json({
+    }
+    else{
+        res.status(404).json({
             "Success":false,
-            "message":"Error in Deleting Blog Post",
-            "error":err
+            "message":"You are not authorized to delete post",
         })
     }
 }
 
-//get all blog posts (pagination)
+
+
+
+
+
+
+
 
 //rate blog posts
 let rateBlogPost=async(req, res)=>{
@@ -243,6 +304,7 @@ let comment=async(req, res)=>{
 module.exports={
     createBlogPost,
     getBlogPost, 
+    getOwnPosts,
     deleteBlogPost, 
     updateBlogPost,
     rateBlogPost,
