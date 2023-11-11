@@ -2,6 +2,7 @@ const BlogPost=require("../Models/BlogPost.schema")
 const blogComment=require("../Models/blogComment.schema")
 const blogRate=require("../Models/blogRate.schema")
 const notification=require("../Models/notification.schema")
+const User=require("../Models/User.schema")
 
 //rate a blog post
 let rateBlogPost=async(req, res)=>{
@@ -132,11 +133,72 @@ let commentOnPost=async(req, res)=>{
 }
 
 //get another bloggers profile (name and desc)
+let getUsersProfile=async(req, res)=>{
+    let getUser=req.params.username
 
+    try{
+        let UserInfo=await User.findOne({username:getUser})
+
+        if (UserInfo){
+            res.status(200).json({
+                "Success":true,
+                "message":"User Found",
+                "username":UserInfo.username,
+                "userDesc":UserInfo.userDesc,
+            })
+        }
+        else{
+            res.status(400).json({
+                "Success":false,
+                "message":"User Not Found",
+            })
+        }
+
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"Run Time Error in Getting Profile",
+            "error":err
+        })
+    }
+}
 
 //get another bloggers posts
+let getBloggersPosts=async(req, res)=>{
+    let getUser=req.params.username
+
+    
+    try{
+        let blogPost=await BlogPost.find({username:getUser})
+
+        if (blogPost){
+            res.status(200).json({
+                "Success":true,
+                "message":"Blogs Found",
+                "blogs":blogPost
+            })
+        }
+        else{
+            res.status(400).json({
+                "Success":false,
+                "message":"Blogs Not Found",
+            })
+        }
+
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"Run Time Error in Getting Blogs",
+            "error":err
+        })
+    }
+
+}
 
 //follow a blogger -->send notification
+let followBlogger=async(req, res)=>{
+    
+}
 
 //sorting blogs
 
@@ -151,4 +213,7 @@ let commentOnPost=async(req, res)=>{
 module.exports={
     rateBlogPost,
     commentOnPost,
+    getUsersProfile,
+    getBloggersPosts,
+    followBlogger
 }
