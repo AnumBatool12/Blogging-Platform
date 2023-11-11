@@ -82,11 +82,124 @@ let updateUserStatus=async(req, res)=>{
 }
 
 //list all blog posts
-//block a blog
+let seeAllBlogPosts=async(req, res)=>{
+    let profileInfo=req.token
+
+    if (profileInfo){
+        try{
+            let posts=await BlogPost.find({})
+
+            if (posts){
+                res.status(200).json({
+                    "Success":true, 
+                    "message":"Posts Found",
+                    "Posts":posts
+                })
+            }
+            else{
+                res.status(404).json({
+                    "Success":false,
+                    "message":"Posts not Found",
+                })
+            }
+
+        }catch(err){
+            res.status(404).json({
+                "Success":false,
+                "message":"Run Time Error in getting Blog Posts",
+                "error":err
+            })
+        }
+    }
+    else{
+        res.status(401).json({
+            "Success":false,
+            "message":"Failed to get Token"
+        })
+    }
+}
 
 //see a particular blog post
+let getBlogPost=async(req, res)=>{
+    let blogid=req.params.blogid
+
+    try{
+        let blog= await BlogPost.find({
+            _id:blogid,
+        })
+
+        if (blog){
+            res.status(200).json({
+                "Success":true,
+                "message":"Blog Found",
+                "blogdata":blog,
+            })
+        }
+        else{
+            res.status(404).json({
+                "Success":false,
+                "message":"Blog not Found"
+            })
+        }
+
+
+    }catch(err){
+        res.status(404).json({
+            "Success":false,
+            "message":"Error In Getting Blog Post",
+            "error":err
+        })
+    }
+}
+
+//block a blog
+let handleBlogStatus=async(req, res)=>{
+    let auth=req.headers.token
+    let blogid=req.params.blogid
+
+    if (auth){
+        try{
+            let {blogStatus}=req.body
+            let blockedUser=await BlogPost.findOneAndUpdate(
+                {_id:blogid},
+                { $set: {blogStatus:blogStatus}},
+                { returnDocument: 'after' }
+            )
+
+            if (blogStatus){
+                res.status(200).json({
+                    "Success":true,
+                    "message":"Blog's status updated successfully"
+                })
+            }
+            else{
+                res.status(404).json({
+                    "Success":false,
+                    "message":"Could not Update blog's status",
+                })
+            }
+
+        }catch(err){
+            res.status(404).json({
+                "Success":false,
+                "message":"Error in Blocking Blog",
+                "error":err
+            })
+        }
+    }
+    else{
+        res.status(401).json({
+            "Success":false,
+            "message":"You are not authorized to block blog"
+        })
+    }
+}
+
 
 module.exports={
     getAllUsers,
-    updateUserStatus
+    updateUserStatus,
+    seeAllBlogPosts,
+    getBlogPost,
+    handleBlogStatus
 }
