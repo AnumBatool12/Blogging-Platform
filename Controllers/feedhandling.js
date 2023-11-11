@@ -3,6 +3,7 @@ const blogComment=require("../Models/blogComment.schema")
 const blogRate=require("../Models/blogRate.schema")
 const notification=require("../Models/notification.schema")
 const User=require("../Models/User.schema")
+const followings=require("../Models/following.schema")
 
 //rate a blog post
 let rateBlogPost=async(req, res)=>{
@@ -197,7 +198,66 @@ let getBloggersPosts=async(req, res)=>{
 
 //follow a blogger -->send notification
 let followBlogger=async(req, res)=>{
-    
+    let profileusername=req.token.username //follower
+    let follow=req.params.followusername  //followed
+
+    let findUser=await User.findOne({username:follow}) //seeing if blogger exists
+    if (!findUser){
+        res.status(404).json({
+            "Success":false,
+            "message":"User Does Not exisit",
+        })
+    }
+
+    let newFollower={
+        "blogger":follow,
+        "follower":profileusername
+    }
+    let not=profileusername + " is now following your blog"
+    let notify={
+        "userReciever":follow,
+        "userSender":profileusername,
+        "ID":follow,
+        "notification":not
+    }
+
+    try{
+        //sending notification
+        let Notify=await notification.create(notify)
+        if (!Notify){
+            res.status(404).json({
+                "Success":false,
+                "message":"Could not Notify",
+            })
+        }
+
+        let nowfollowing=await followings.create(newFollower)
+        if (nowfollowing){
+            res.status(201).json({
+                "Success":true,
+                "message":"Following Status Updated",
+            })
+        }
+        else{
+            res.status(400).json({
+                "Success":false,
+                "message":"Unable to Follow",
+            })
+        }
+
+
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"Run Time Error during Following",
+            "error":err
+        })
+    }
+
+
+
+
+
 }
 
 //sorting blogs

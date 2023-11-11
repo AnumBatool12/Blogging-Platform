@@ -15,6 +15,6 @@ feedRouter.put("/:blogid/:rate", rateBlogPost)
 feedRouter.post("/comment/:blogid", commentOnPost)
 feedRouter.get("/:username", getUsersProfile)
 feedRouter.get("/UserBlogs/:username", getBloggersPosts)
-feedRouter.get("/follow/:followid", authUserProfile, followBlogger)
+feedRouter.get("/follow/:followusername", authUserProfile, followBlogger)
 
 module.exports=feedRouter
