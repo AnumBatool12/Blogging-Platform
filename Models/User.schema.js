@@ -5,6 +5,7 @@ const UserSchema=mongoose.Schema({
     "email": String, 
     "password": String,
     "Role":String, 
+    //add user description/
     "AccountStatus":String, //Active or Disable
 }, {timestamps:true})
 

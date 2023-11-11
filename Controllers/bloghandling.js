@@ -180,6 +180,7 @@ let rateBlogPost=async(req, res)=>{
 }
 
 //comment under blog post
+//this is where notification handling is also done
 let comment=async(req, res)=>{
     let comment=req.body
 
@@ -193,12 +194,24 @@ let comment=async(req, res)=>{
         })
     }
 
+    //creating notification
+    let newNotification={
+        "toUser":found.username,
+        "blogID":comment.BlogPostID,
+        "notification":"${comment.usernameCommenter} just commented under your post"
+    }
+
+    await notification.create(newNotification)
+
+    //commenting under post
     try{
         blogComment.create(comment).then(()=>{
             res.status(201).json({
                 "Success":true,
                 "message":"Blog has been successfully commented",
-                "data":comment
+                "data":comment,
+                "notificationStatus":true,
+                "notification":newNotification
             })
         }).catch(err=>{
             res.status(400).json({
@@ -214,6 +227,7 @@ let comment=async(req, res)=>{
             "error":err
         })
     }
+
 }
 
 //filter blog posts
