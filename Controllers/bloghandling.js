@@ -208,6 +208,33 @@ let deleteBlogPost=async(req, res)=>{
 }
 
 //get notifications
+let getNotification=async(req, res)=>{
+    let profileInfo=req.token.username
+
+    try{
+        let noti=await notification.find({userReciever:profileInfo})
+
+        if (noti){
+            res.status(200).json({
+                "Success":true,
+                "message":"Here are your notifications",
+                "notifications":noti
+            })
+        }
+        else{
+            res.status(404).json({
+                "Success":false,
+                "message":"No notifiactions were found",
+            })
+        }
+
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"You are not authorized to see notifcations post",
+        })
+    }
+}
 
 //delete a comment
 
@@ -217,4 +244,5 @@ module.exports={
     getOwnPosts,
     deleteBlogPost, 
     updateBlogPost,
+    getNotification
 }
