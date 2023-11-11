@@ -4,7 +4,8 @@ const {
     getOwnPosts,
     deleteBlogPost,
     updateBlogPost,
-    getNotification
+    getNotification,
+    getFollowingList
 }=require("../Controllers/bloghandling")
 const {authUserProfile}=require("../utils")
 const express=require("express")
@@ -15,6 +16,7 @@ let blogRouter=express.Router()
 blogRouter.post("/createBlog", createBlogPost)//
 blogRouter.get("/", authUserProfile, getOwnPosts)//
 blogRouter.get("/notification", authUserProfile, getNotification)
+blogRouter.get("/followers", authUserProfile,getFollowingList)
 blogRouter.get("/:blogid", authUserProfile, getBlogPost)
 blogRouter.patch("/:blogid", authUserProfile, updateBlogPost)//
 blogRouter.delete("/:blogid", authUserProfile ,deleteBlogPost)//

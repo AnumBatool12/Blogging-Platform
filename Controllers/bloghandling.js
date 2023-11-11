@@ -2,6 +2,7 @@ const BlogPost=require("../Models/BlogPost.schema")
 const blogComment=require("../Models/blogComment.schema")
 const blogRate=require("../Models/blogRate.schema")
 const notification=require("../Models/notification.schema")
+const followers=require("../Models/following.schema")
 
 //create blog post 
 let createBlogPost=(req, res)=>{
@@ -236,7 +237,33 @@ let getNotification=async(req, res)=>{
     }
 }
 
-//delete a comment
+//Getting Your Following List
+let getFollowingList=async(req, res)=>{
+    let profileInfo=req.token.username
+    try{
+        let follow=await followers.find({blogger:profileInfo})
+
+        if (follow){
+            res.status(200).json({
+                "Success":true,
+                "message":"Here are your Followers",
+                "followers":follow
+            })
+        }
+        else{
+            res.status(404).json({
+                "Success":false,
+                "message":"No followers were found",
+            })
+        }
+
+    }catch(err){
+        res.status(400).json({
+            "Success":false,
+            "message":"You are not authorized to see followers",
+        })
+    }
+}
 
 module.exports={
     createBlogPost,
@@ -244,5 +271,6 @@ module.exports={
     getOwnPosts,
     deleteBlogPost, 
     updateBlogPost,
-    getNotification
+    getNotification,
+    getFollowingList
 }
