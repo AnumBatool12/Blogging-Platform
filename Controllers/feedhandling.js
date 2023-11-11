@@ -73,7 +73,7 @@ let commentOnPost=async(req, res)=>{
     let commenter=req.body.username
     let blogid=req.params.blogid
 
-    let found=await BlogPost.find({_id:blogid})
+    let found=await BlogPost.findOne({_id:blogid})
     if (!found){
         res.status(404).json({
             "Success":false,
@@ -81,12 +81,13 @@ let commentOnPost=async(req, res)=>{
         })
     }
 
+    let not=commenter + 'just commented under your post';
     //creating notification
     let newNotification={
         "userReciever":found.username,
         "userSender":commenter,
         "ID":blogid,
-        "notification":"${commenter} just commented under your post"
+        "notification":not
     }
 
     //adding to notification db

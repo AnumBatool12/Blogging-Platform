@@ -84,9 +84,10 @@ let getBlogPost=async(req, res)=>{
         })
 
         let comments=await blogComment.find({
-            _id:blogid,
+            BlogPostID:blogid,
             userCreator:profileInfo.username
         })
+
 
         if (blog){
             res.status(200).json({
@@ -210,81 +211,10 @@ let deleteBlogPost=async(req, res)=>{
 
 //delete a comment
 
-
-
-
-
-
-
-
-
-
-//comment under blog post
-//this is where notification handling is also done
-let comment=async(req, res)=>{
-    let comment=req.body
-
-    let data=req.body.blogID
-
-    let found=await BlogPost.find({_id:data})
-    if (!found){
-        res.status(404).json({
-            "Success":false,
-            "message":"Blog Post Not Found",
-        })
-    }
-
-    //creating notification
-    let newNotification={
-        "toUser":found.username,
-        "blogID":comment.BlogPostID,
-        "notification":"${comment.usernameCommenter} just commented under your post"
-    }
-
-    await notification.create(newNotification)
-
-    //commenting under post
-    try{
-        blogComment.create(comment).then(()=>{
-            res.status(201).json({
-                "Success":true,
-                "message":"Blog has been successfully commented",
-                "data":comment,
-                "notificationStatus":true,
-                "notification":newNotification
-            })
-        }).catch(err=>{
-            res.status(400).json({
-                "Success":false,
-                "message":"Blog Post commenting error",
-                "error":err
-            })
-        })
-    }catch(err){
-        res.status(400).json({
-            "Success":false,
-            "message":"Error in Commenting Blog Post",
-            "error":err
-        })
-    }
-
-}
-
-//filter blog posts
-
-//find a blog post using keywords
-
-//sort blog posts by time
-
-//sort and filter blog posts
-
-//disable blog post
-
 module.exports={
     createBlogPost,
     getBlogPost, 
     getOwnPosts,
     deleteBlogPost, 
     updateBlogPost,
-    comment
 }
