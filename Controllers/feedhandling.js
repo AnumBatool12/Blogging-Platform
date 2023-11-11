@@ -171,9 +171,8 @@ let getUsersProfile=async(req, res)=>{
 let getBloggersPosts=async(req, res)=>{
     let getUser=req.params.username
 
-    
     try{
-        let blogPost=await BlogPost.find({username:getUser})
+        let blogPost=await BlogPost.find({username:getUser, blogStatus:"Active"})
 
         if (blogPost){
             res.status(200).json({
@@ -276,6 +275,8 @@ let findBlogs=async(req, res)=>{
             ]
         })
 
+        blogs=blogs.filter(blog=>blog.blogStatus=="Active")
+
         if (blogs){
             res.status(200).json({
                 "Success":true,
@@ -323,6 +324,7 @@ let mainFeed=async(req, res)=>{
         try{
             let posts=await BlogPost.paginate(query, option);
             
+            posts.docs=posts.docs.filter(blog=>blog.blogStatus=="Active")
             if (posts.docs){
                 res.status(200).json({
                     "Success":true,

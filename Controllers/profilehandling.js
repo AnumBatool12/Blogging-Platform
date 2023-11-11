@@ -223,50 +223,6 @@ let updateUserDesc=async(req, res)=>{
 }
 
 
-
-//diable account-->move to admin controllers
-let disableUserAccount=async(req, res)=>{
-    let auth=req.headers.token
-
-    if (auth){
-        try{
-            let {email, AccountStatus}=req.body
-            let blockedUser=await users.findOneAndUpdate(
-                {email:email},
-                { $set: {AccountStatus:AccountStatus}},
-                { returnDocument: 'after' }
-            )
-
-            if (blockedUser){
-                res.status(200).json({
-                    "Success":true,
-                    "message":"User's account status updated successfully"
-                })
-            }
-            else{
-                res.status(404).json({
-                    "Success":false,
-                    "message":"Could not Update User's account status",
-                })
-            }
-
-        }catch(err){
-            res.status(404).json({
-                "Success":false,
-                "message":"Error in Blocking User",
-                "error":err
-            })
-        }
-    }
-    else{
-        res.status(401).json({
-            "Success":false,
-            "message":"You are not authorized to block User"
-        })
-    }
-}
-
-
 module.exports={
     getUserProfile,
     deleteAccount,
@@ -274,5 +230,4 @@ module.exports={
     updateEmail,
     updateUsername,
     updateUserDesc,
-    disableUserAccount
 }

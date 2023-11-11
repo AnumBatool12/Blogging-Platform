@@ -8,6 +8,7 @@ const routerLogin=require("./Routes/loginRoute")
 const profileRouter=require("./Routes/profileRouter")
 const blogHandler=require("./Routes/blogRoutes")
 const FeedHandler=require("./Routes/feedRoutes")
+const adminHandler=require("./Routes/adminRoutes")
 
 //app
 const app=express()
@@ -22,6 +23,7 @@ app.use("/login", routerLogin)
 app.use("/profile", profileRouter)
 app.use("/blog", blogHandler)
 app.use("/feed", FeedHandler)
+app.use("/admin", adminHandler)
 
 //Database
 mongoose.connect(process.env.MONGODB_STRING).then(()=>{

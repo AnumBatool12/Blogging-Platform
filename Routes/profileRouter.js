@@ -3,8 +3,7 @@ const {getUserProfile,
     updatePassword,
     updateEmail,
     updateUsername,
-    updateUserDesc,
-    disableUserAccount}=require("../Controllers/profilehandling")
+    updateUserDesc}=require("../Controllers/profilehandling")
 
 const {authUserProfile, authAdminProfile}=require("../utils")
 const express=require("express")
@@ -25,6 +24,5 @@ profileRouter.patch("/admin/password", authAdminProfile, updatePassword)//
 profileRouter.patch("/admin/email", authAdminProfile, updateEmail)//
 profileRouter.patch("/admin/username", authAdminProfile, updateUsername)//
 profileRouter.patch("/admin/description", authAdminProfile, updateUserDesc)//
-profileRouter.patch("/admin/block", authAdminProfile, disableUserAccount)//remove this from here later
 
 module.exports=profileRouter
