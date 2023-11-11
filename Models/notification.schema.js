@@ -1,8 +1,9 @@
 const mongoose=require("mongoose")
 
 const notification=mongoose.Schema({
-    "toUser":String,
-    "blogID":String,//add user name of reciever
+    "userReciever":String,//reciver of notification
+    "userSender":String,    //user commenter /follower
+    "ID":String,//id of blog post or user who was followed ->so we know who to send it to
     "notification":String, 
 }, {timestamps:true})
 

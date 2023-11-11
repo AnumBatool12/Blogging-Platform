@@ -1,11 +1,13 @@
 const mongoose=require("mongoose")
 
 const BlogPost=mongoose.Schema({
-    //"blogID":String, 
     "username":String, 
+    "BlogTitle":String,
     "postContent":String, 
-    "keywords":[String],//add catagories and average rating
-    "blogStatus":String //Active or Disable
+    "AvgRating":String,
+    "keywords":[String],
+    "catagory":[String],
+    "blogStatus":String //Public or Disabled
 }, {timestamps:true})
 
 const model=mongoose.model("BlogPost", BlogPost)
