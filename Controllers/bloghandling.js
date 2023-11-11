@@ -206,7 +206,9 @@ let deleteBlogPost=async(req, res)=>{
     }
 }
 
+//get notifications
 
+//delete a comment
 
 
 
