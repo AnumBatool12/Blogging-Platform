@@ -4,19 +4,19 @@ const BlogPost=require("./Models/BlogPost.schema")
 //This is for user
 const authUserProfile=(req, res, next)=>{
     //getting token from headers
-    const token=req.headers.token
+    const token = req.headers.authorization;
+    console.log("Token Recieved "+ token)
     if (!token){
-        res.status(401).json({"message":"Token not found"})
+        return res.status(401).json({"message":"Token not found"})
     }
 
     //decoding the token and storing in req
     try{
         let decodedToken=jwt.verify(token, process.env.SECRET_USER)
         req.token=decodedToken
-        next()
-
+        next();
     }catch(err){
-        res.status(401).json({
+        return res.status(401).json({
             "Success":false,
             "message":"Error getting Token",
             "error":err
@@ -36,7 +36,7 @@ const authAdminProfile=(req, res, next)=>{
     try{
         let decodedToken=jwt.verify(token, process.env.SECRET_ADMIN)
         req.token=decodedToken
-        next()
+        next();
 
     }catch(err){
         res.status(401).json({
